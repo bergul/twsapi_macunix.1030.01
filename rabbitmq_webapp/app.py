@@ -17,27 +17,31 @@ def consume_from_rabbitmq() -> None:
     """Background thread consuming quotes from RabbitMQ.
 
     The consumer expects messages in JSON format like:
-    {"symbol": "EURUSD-X", "bid": 1.11683, "ask": 1.16698, "time": "16:43:49"}
+    {"local_symbol": "GCZ5", "bidprice": 3573.7, "askprice": 3573.8,
+     "time": "2025-09-02T15:12:33.1428118Z"}
     """
     connection = pika.BlockingConnection(pika.ConnectionParameters())
     channel = connection.channel()
 
     queue_name = "quotes"
     channel.queue_declare(queue=queue_name, durable=True)
+    # Explicitly bind the queue to the default exchange so messages published
+    # with routing_key=queue_name are received.
+    channel.queue_bind(queue=queue_name, exchange="", routing_key=queue_name)
 
     def callback(ch, method, properties, body):
         message = json.loads(body)
-        symbol = message.get("symbol") or message.get("local_symbol")
+        symbol = message.get("local_symbol") or message.get("symbol")
         if not symbol:
             return
-        bid = message.get("bid") or message.get("bidprice", "")
-        ask = message.get("ask") or message.get("askprice", "")
+        bid = message.get("bidprice") or message.get("bid") or ""
+        ask = message.get("askprice") or message.get("ask") or ""
         msg_time = message.get("time", time.strftime("%H:%M:%S"))
         with quotes_lock:
             quotes[symbol] = {
-                "symbol": symbol,
-                "bid": str(bid),
-                "ask": str(ask),
+                "local_symbol": symbol,
+                "bidprice": str(bid),
+                "askprice": str(ask),
                 "time": msg_time,
             }
 
