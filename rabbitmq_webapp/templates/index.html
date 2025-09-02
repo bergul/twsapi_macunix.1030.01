@@ -9,9 +9,9 @@
     <table id="quotes">
       <thead>
         <tr>
-          <th>Symbol</th>
-          <th>Bid</th>
-          <th>Ask</th>
+          <th>Local Symbol</th>
+          <th>Bid Price</th>
+          <th>Ask Price</th>
           <th>Time</th>
         </tr>
       </thead>
@@ -26,10 +26,10 @@
             tbody.innerHTML = '';
             rows.forEach(row => {
               const tr = document.createElement('tr');
-              ['symbol','bid','ask','time'].forEach(col => {
+              ['local_symbol','bidprice','askprice','time'].forEach(col => {
                 const td = document.createElement('td');
                 td.textContent = row[col];
-                if (col === 'bid' || col === 'ask') {
+                if (col === 'bidprice' || col === 'askprice') {
                   td.className = parseFloat(row[col]) >= 0 ? 'green' : 'red';
                 }
                 tr.appendChild(td);
