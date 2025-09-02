@@ -1,0 +1,29 @@
+body {
+  background: black;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 6px 10px;
+  text-align: center;
+  border: 1px solid #222;
+}
+
+th {
+  background: #000;
+  color: #fff;
+}
+
+.green {
+  color: #00aa00;
+}
+
+.red {
+  color: #cc0000;
+}

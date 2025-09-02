@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Market Quotes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  </head>
+  <body>
+    <table id="quotes">
+      <thead>
+        <tr>
+          <th>Symbol</th>
+          <th>Bid</th>
+          <th>Ask</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <script>
+      function update() {
+        fetch('/data')
+          .then(response => response.json())
+          .then(rows => {
+            const tbody = document.querySelector('#quotes tbody');
+            tbody.innerHTML = '';
+            rows.forEach(row => {
+              const tr = document.createElement('tr');
+              ['symbol','bid','ask','time'].forEach(col => {
+                const td = document.createElement('td');
+                td.textContent = row[col];
+                if (col === 'bid' || col === 'ask') {
+                  td.className = parseFloat(row[col]) >= 0 ? 'green' : 'red';
+                }
+                tr.appendChild(td);
+              });
+              tbody.appendChild(tr);
+            });
+          });
+      }
+      setInterval(update, 1000);
+      update();
+    </script>
+  </body>
+</html>
