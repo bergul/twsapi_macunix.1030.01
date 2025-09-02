@@ -1,6 +1,7 @@
 ﻿/* Copyright (C) 2019 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
  * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
 
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using IBApi;
@@ -43,6 +44,8 @@ namespace IBSampleApp.ui
         private bool active;
 
         private List<Contract> activeRequests = new List<Contract>();
+        private readonly Dictionary<int, double> bidPrices = new Dictionary<int, double>();
+        private readonly Dictionary<int, double> askPrices = new Dictionary<int, double>();
 
         public MarketDataManager(IBClient client, DataGridView dataGrid)
             : base(client, dataGrid)
@@ -91,6 +94,16 @@ namespace IBSampleApp.ui
             }
             if (clearTable)
                 Clear();
+        }
+
+        private void PublishIfReady(int index)
+        {
+            if (bidPrices.TryGetValue(index, out double bid) &&
+                askPrices.TryGetValue(index, out double ask))
+            {
+                string symbol = activeRequests[index].LocalSymbol;
+                RabbitPublisher.Publish(symbol, bid, ask, DateTime.UtcNow);
+            }
         }
 
         private void checkToAddRow(int requestId)
@@ -155,6 +168,8 @@ namespace IBSampleApp.ui
                         //BID, DELAYED_BID
                         grid[BID_PRICE_INDEX, index].Value = Util.DoubleMaxString(dataMessage.Price);
                         grid[PRE_OPEN_BID, index].Value = dataMessage.Attribs.PreOpen;
+                        bidPrices[index] = dataMessage.Price;
+                        PublishIfReady(index);
                         break;
                     }
                 case TickType.ASK:
@@ -163,6 +178,8 @@ namespace IBSampleApp.ui
                         //ASK, DELAYED_ASK
                         grid[ASK_PRICE_INDEX, index].Value = Util.DoubleMaxString(dataMessage.Price);
                         grid[PRE_OPEN_ASK, index].Value = dataMessage.Attribs.PreOpen;
+                        askPrices[index] = dataMessage.Price;
+                        PublishIfReady(index);
                         break;
                     }
                 case TickType.CLOSE:
