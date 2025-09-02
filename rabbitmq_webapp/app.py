@@ -27,15 +27,18 @@ def consume_from_rabbitmq() -> None:
 
     def callback(ch, method, properties, body):
         message = json.loads(body)
-        symbol = message.get("symbol")
+        symbol = message.get("symbol") or message.get("local_symbol")
         if not symbol:
             return
+        bid = message.get("bid") or message.get("bidprice", "")
+        ask = message.get("ask") or message.get("askprice", "")
+        msg_time = message.get("time", time.strftime("%H:%M:%S"))
         with quotes_lock:
             quotes[symbol] = {
                 "symbol": symbol,
-                "bid": str(message.get("bid", "")),
-                "ask": str(message.get("ask", "")),
-                "time": message.get("time", time.strftime("%H:%M:%S")),
+                "bid": str(bid),
+                "ask": str(ask),
+                "time": msg_time,
             }
 
     channel.basic_consume(queue=queue_name, on_message_callback=callback, auto_ack=True)
