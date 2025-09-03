@@ -102,7 +102,7 @@ namespace IBSampleApp.ui
                 askPrices.TryGetValue(index, out double ask))
             {
                 string symbol = activeRequests[index].LocalSymbol;
-                RabbitPublisher.Publish(symbol, bid, ask, DateTime.UtcNow);
+                ZmqPublisher.Publish(symbol, bid, ask, DateTime.UtcNow);
             }
         }
 

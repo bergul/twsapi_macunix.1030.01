@@ -54,7 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="RabbitMQ.Client" Version="6.5.0" />
+    <PackageReference Include="NetMQ" Version="4.0.1.7" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   <ItemGroup>
@@ -190,7 +190,7 @@
     <Compile Include="ui\TickReqParamsMessage.cs" />
     <Compile Include="ui\WshManager.cs" />
     <Compile Include="util\Utils.cs" />
-    <Compile Include="util\RabbitPublisher.cs" />
+    <Compile Include="util\ZmqPublisher.cs" />
     <Compile Include="util\XmlHelper.cs" />
     <EmbeddedResource Include="ui\ComboContractResults.resx">
       <DependentUpon>ComboContractResults.cs</DependentUpon>
