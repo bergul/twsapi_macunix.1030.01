@@ -17,13 +17,54 @@
       </thead>
       <tbody></tbody>
     </table>
+    <canvas id="diffChart" width="800" height="400"></canvas>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+      const diffData = {
+        labels: [],
+        datasets: [
+          { label: 'Bid', data: [], borderColor: 'green', fill: false },
+          { label: 'Ask', data: [], borderColor: 'red', fill: false }
+        ]
+      };
+      const diffChartCtx = document.getElementById('diffChart').getContext('2d');
+      const diffChart = new Chart(diffChartCtx, {
+        type: 'line',
+        data: diffData,
+        options: { scales: { x: { display: true }, y: { display: true } } }
+      });
+
       function update() {
         fetch('/data')
           .then(response => response.json())
           .then(rows => {
             const tbody = document.querySelector('#quotes tbody');
             tbody.innerHTML = '';
+            const rowMap = {};
+            rows.forEach(r => rowMap[r.local_symbol] = r);
+            const gcZ5 = rowMap['GCZ5'];
+            const gcV5 = rowMap['GCV5'];
+            if (gcZ5 && gcV5) {
+              const diffBid = parseFloat(gcZ5.bidprice) - parseFloat(gcV5.askprice);
+              const diffAsk = parseFloat(gcZ5.askprice) - parseFloat(gcV5.bidprice);
+              const time = gcZ5.time || gcV5.time;
+              const diffRow = {
+                local_symbol: 'DIFF-Z5-V5',
+                bidprice: diffBid.toFixed(2),
+                askprice: diffAsk.toFixed(2),
+                time: time
+              };
+              rows.push(diffRow);
+              diffData.labels.push(time);
+              diffData.datasets[0].data.push(diffBid);
+              diffData.datasets[1].data.push(diffAsk);
+              if (diffData.labels.length > 100) {
+                diffData.labels.shift();
+                diffData.datasets[0].data.shift();
+                diffData.datasets[1].data.shift();
+              }
+              diffChart.update();
+            }
             rows.forEach(row => {
               const tr = document.createElement('tr');
               ['local_symbol','bidprice','askprice','time'].forEach(col => {
