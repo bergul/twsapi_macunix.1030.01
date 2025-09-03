@@ -60,4 +60,4 @@ def data_endpoint():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="172.31.28.98", port=80, debug=True)
