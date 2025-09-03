@@ -15,6 +15,11 @@ namespace IBSampleApp.util
             publisher.Bind("tcp://*:5555");
         }
 
+        public static double CalculateSpread(double bidPrice, double askPrice)
+        {
+            return Math.Abs(askPrice - bidPrice);
+        }
+
         public static void Publish(string symbol, double bidPrice, double askPrice, DateTime time)
         {
             var payload = new
@@ -22,6 +27,7 @@ namespace IBSampleApp.util
                 local_symbol = symbol,
                 bidprice = bidPrice,
                 askprice = askPrice,
+                spread = CalculateSpread(bidPrice, askPrice),
                 time = time.ToString("o")
             };
             publisher.SendFrame(JsonConvert.SerializeObject(payload));
