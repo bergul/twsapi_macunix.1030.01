@@ -4,36 +4,32 @@ import time
 from typing import Dict
 
 from flask import Flask, jsonify, render_template
-import pika
+import zmq
 
 app = Flask(__name__)
 
-# In-memory storage for quotes received from RabbitMQ.
+# In-memory storage for quotes received from ZeroMQ.
 quotes: Dict[str, Dict[str, str]] = {}
 quotes_lock = threading.Lock()
 
 
-def consume_from_rabbitmq() -> None:
-    """Background thread consuming quotes from RabbitMQ.
+def consume_from_zeromq() -> None:
+    """Background thread consuming quotes from a ZeroMQ publisher.
 
-    The consumer expects messages in JSON format like:
+    The consumer expects each message to be a JSON string such as:
     {"local_symbol": "GCZ5", "bidprice": 3573.7, "askprice": 3573.8,
      "time": "2025-09-02T15:12:33.1428118Z"}
     """
-    connection = pika.BlockingConnection(pika.ConnectionParameters())
-    channel = connection.channel()
+    context = zmq.Context()
+    socket = context.socket(zmq.SUB)
+    socket.connect("tcp://localhost:5555")
+    socket.subscribe("")
 
-    queue_name = "quotes"
-    channel.queue_declare(queue=queue_name, durable=True)
-    # Explicitly bind the queue to the default exchange so messages published
-    # with routing_key=queue_name are received.
-    channel.queue_bind(queue=queue_name, exchange="", routing_key=queue_name)
-
-    def callback(ch, method, properties, body):
-        message = json.loads(body)
+    while True:
+        message = json.loads(socket.recv_string())
         symbol = message.get("local_symbol") or message.get("symbol")
         if not symbol:
-            return
+            continue
         bid = message.get("bidprice") or message.get("bid") or ""
         ask = message.get("askprice") or message.get("ask") or ""
         msg_time = message.get("time", time.strftime("%H:%M:%S"))
@@ -45,12 +41,9 @@ def consume_from_rabbitmq() -> None:
                 "time": msg_time,
             }
 
-    channel.basic_consume(queue=queue_name, on_message_callback=callback, auto_ack=True)
-    channel.start_consuming()
-
 
 # Start consumer thread as soon as module is imported.
-threading.Thread(target=consume_from_rabbitmq, daemon=True).start()
+threading.Thread(target=consume_from_zeromq, daemon=True).start()
 
 
 @app.route("/")
