@@ -67,7 +67,7 @@
               diffChart.update();
             }
             rows.forEach(row => {
-              row.spread = (parseFloat(row.bidprice) - parseFloat(row.askprice)).toFixed(2);
+              row.spread = Math.abs(parseFloat(row.askprice) - parseFloat(row.bidprice)).toFixed(2);
               const tr = document.createElement('tr');
               ['local_symbol','bidprice','askprice','spread','time'].forEach(col => {
                 const td = document.createElement('td');
