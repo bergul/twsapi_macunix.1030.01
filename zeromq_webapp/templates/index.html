@@ -12,6 +12,7 @@
           <th>Local Symbol</th>
           <th>Bid Price</th>
           <th>Ask Price</th>
+          <th>Spread</th>
           <th>Time</th>
         </tr>
       </thead>
@@ -66,11 +67,12 @@
               diffChart.update();
             }
             rows.forEach(row => {
+              row.spread = (parseFloat(row.askprice) - parseFloat(row.bidprice)).toFixed(2);
               const tr = document.createElement('tr');
-              ['local_symbol','bidprice','askprice','time'].forEach(col => {
+              ['local_symbol','bidprice','askprice','spread','time'].forEach(col => {
                 const td = document.createElement('td');
                 td.textContent = row[col];
-                if (col === 'bidprice' || col === 'askprice') {
+                if (col === 'bidprice' || col === 'askprice' || col === 'spread') {
                   td.className = parseFloat(row[col]) >= 0 ? 'green' : 'red';
                 }
                 tr.appendChild(td);
