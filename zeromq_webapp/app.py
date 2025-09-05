@@ -1,49 +1,61 @@
 import json
+import socket
 import threading
 import time
 from typing import Dict
 
 from flask import Flask, jsonify, render_template
-import zmq
 
 app = Flask(__name__)
 
-# In-memory storage for quotes received from ZeroMQ.
+# In-memory storage for quotes received from TCP clients.
 quotes: Dict[str, Dict[str, str]] = {}
 quotes_lock = threading.Lock()
 
 
-def consume_from_zeromq() -> None:
-    """Background thread consuming quotes from a ZeroMQ publisher.
+def _handle_connection(conn: socket.socket) -> None:
+    """Read newline-delimited JSON messages from a socket."""
+    buffer = ""
+    with conn:
+        while True:
+            data = conn.recv(4096)
+            if not data:
+                break
+            buffer += data.decode()
+            while "\n" in buffer:
+                line, buffer = buffer.split("\n", 1)
+                try:
+                    message = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                symbol = message.get("local_symbol") or message.get("symbol")
+                if not symbol:
+                    continue
+                bid = message.get("bidprice") or message.get("bid") or ""
+                ask = message.get("askprice") or message.get("ask") or ""
+                msg_time = message.get("time", time.strftime("%H:%M:%S"))
+                with quotes_lock:
+                    quotes[symbol] = {
+                        "local_symbol": symbol,
+                        "bidprice": str(bid),
+                        "askprice": str(ask),
+                        "time": msg_time,
+                    }
 
-    The consumer expects each message to be a JSON string such as:
-    {"local_symbol": "GCZ5", "bidprice": 3573.7, "askprice": 3573.8,
-     "time": "2025-09-02T15:12:33.1428118Z"}
-    """
-    context = zmq.Context()
-    socket = context.socket(zmq.SUB)
-    socket.connect("tcp://localhost:5555")
-    socket.subscribe("")
 
+def consume_from_tcp() -> None:
+    """Background thread accepting JSON messages on TCP port 6565."""
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    server.bind(("0.0.0.0", 6565))
+    server.listen()
     while True:
-        message = json.loads(socket.recv_string())
-        symbol = message.get("local_symbol") or message.get("symbol")
-        if not symbol:
-            continue
-        bid = message.get("bidprice") or message.get("bid") or ""
-        ask = message.get("askprice") or message.get("ask") or ""
-        msg_time = message.get("time", time.strftime("%H:%M:%S"))
-        with quotes_lock:
-            quotes[symbol] = {
-                "local_symbol": symbol,
-                "bidprice": str(bid),
-                "askprice": str(ask),
-                "time": msg_time,
-            }
+        conn, _ = server.accept()
+        threading.Thread(target=_handle_connection, args=(conn,), daemon=True).start()
 
 
 # Start consumer thread as soon as module is imported.
-threading.Thread(target=consume_from_zeromq, daemon=True).start()
+threading.Thread(target=consume_from_tcp, daemon=True).start()
 
 
 @app.route("/")
