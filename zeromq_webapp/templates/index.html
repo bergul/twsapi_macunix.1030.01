@@ -25,12 +25,14 @@
         labels: [],
         datasets: [
           { label: 'Bid', data: [], borderColor: 'green', fill: false },
-          { label: 'Ask', data: [], borderColor: 'red', fill: false }
+          { label: 'Ask', data: [], borderColor: 'red', fill: false },
+          { label: 'Bid-PrevAsk', data: [], borderColor: 'blue', fill: false }
         ]
       };
       const monthOrder = { F:1, G:2, H:3, J:4, K:5, M:6, N:7, Q:8, U:9, V:10, X:11, Z:12 };
       const selectedSymbols = new Set();
       let lastDiffLabel = '';
+      let lastDiffAsk = null;
 
       function selectSymbolPair(rowMap) {
         const symbols = Array.from(selectedSymbols);
@@ -94,6 +96,11 @@
               const earlier = pair.earlier.row;
               const diffBid = parseFloat(later.bidprice) - parseFloat(earlier.askprice);
               const diffAsk = parseFloat(later.askprice) - parseFloat(earlier.bidprice);
+              let crossSpread = null;
+              if (lastDiffAsk !== null && diffBid > lastDiffAsk) {
+                crossSpread = diffBid - lastDiffAsk;
+              }
+              lastDiffAsk = diffAsk;
               const time = later.time || earlier.time;
               const symbolLabel = pair.label || `DIFF-${pair.later.suffix}-${pair.earlier.suffix}`;
               const diffRow = {
@@ -101,7 +108,8 @@
                 bidprice: diffBid.toFixed(2),
                 askprice: diffAsk.toFixed(2),
                 time: time,
-                synthetic: true
+                synthetic: true,
+                cross: crossSpread
               };
               rows.push(diffRow);
               if (symbolLabel !== lastDiffLabel) {
@@ -109,21 +117,30 @@
                 diffData.labels = [];
                 diffData.datasets[0].data = [];
                 diffData.datasets[1].data = [];
+                diffData.datasets[2].data = [];
+                lastDiffAsk = null;
               }
               diffData.labels.push(time);
               diffData.datasets[0].label = `Bid ${symbolLabel}`;
               diffData.datasets[1].label = `Ask ${symbolLabel}`;
+              diffData.datasets[2].label = `Bid-PrevAsk ${symbolLabel}`;
               diffData.datasets[0].data.push(diffBid);
               diffData.datasets[1].data.push(diffAsk);
+              diffData.datasets[2].data.push(crossSpread);
               if (diffData.labels.length > 100) {
                 diffData.labels.shift();
                 diffData.datasets[0].data.shift();
                 diffData.datasets[1].data.shift();
+                diffData.datasets[2].data.shift();
               }
               diffChart.update();
             }
             rows.forEach(row => {
-              row.spread = Math.abs(parseFloat(row.askprice) - parseFloat(row.bidprice)).toFixed(2);
+              let spread = Math.abs(parseFloat(row.askprice) - parseFloat(row.bidprice));
+              if (row.synthetic && row.cross !== null) {
+                spread = row.cross;
+              }
+              row.spread = spread.toFixed(2);
               const tr = document.createElement('tr');
               ['local_symbol','bidprice','askprice','spread','time'].forEach(col => {
                 const td = document.createElement('td');
