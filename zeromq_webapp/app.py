@@ -2,6 +2,7 @@ import json
 import socketserver
 import threading
 import time
+from datetime import datetime
 from typing import Any, Dict
 
 from flask import Flask, jsonify, render_template
@@ -72,6 +73,8 @@ class QuoteTCPHandler(socketserver.StreamRequestHandler):
                 message = json.loads(line.decode("utf-8"))
             except json.JSONDecodeError:
                 continue
+            # override time with current timestamp for TCP messages
+            message["time"] = datetime.now().isoformat()
             store_quote(message)
 
 

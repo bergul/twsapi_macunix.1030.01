@@ -34,6 +34,17 @@
 
       function selectSymbolPair(rowMap) {
         const symbols = Array.from(selectedSymbols);
+        if (symbols.includes('F_XAUUSD1025') && symbols.includes('F_XAUUSD1225')) {
+          const laterRow = rowMap['F_XAUUSD1225'];
+          const earlierRow = rowMap['F_XAUUSD1025'];
+          if (laterRow && earlierRow) {
+            return {
+              later: { row: laterRow },
+              earlier: { row: earlierRow },
+              label: 'F_XAUUSD1025_1225_DIFF'
+            };
+          }
+        }
         if (symbols.length < 2) return null;
         function parse(sym) {
           const row = rowMap[sym];
@@ -84,7 +95,7 @@
               const diffBid = parseFloat(later.bidprice) - parseFloat(earlier.askprice);
               const diffAsk = parseFloat(later.askprice) - parseFloat(earlier.bidprice);
               const time = later.time || earlier.time;
-              const symbolLabel = `DIFF-${pair.later.suffix}-${pair.earlier.suffix}`;
+              const symbolLabel = pair.label || `DIFF-${pair.later.suffix}-${pair.earlier.suffix}`;
               const diffRow = {
                 local_symbol: symbolLabel,
                 bidprice: diffBid.toFixed(2),
