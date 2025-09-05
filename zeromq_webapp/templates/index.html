@@ -28,6 +28,32 @@
           { label: 'Ask', data: [], borderColor: 'red', fill: false }
         ]
       };
+      const monthOrder = { F:1, G:2, H:3, J:4, K:5, M:6, N:7, Q:8, U:9, V:10, X:11, Z:12 };
+
+      function selectSymbolPair(rowMap) {
+        const symbols = Object.keys(rowMap);
+        function parse(sym) {
+          const m = sym.match(/^([A-Z]+)([FGHJKMNQUVXZ])(\d+)/);
+          if (!m) return null;
+          const [, root, month, year] = m;
+          const order = parseInt(year, 10) * 12 + monthOrder[month];
+          return { root, suffix: month + year, order, row: rowMap[sym] };
+        }
+        for (let i = 0; i < symbols.length; i++) {
+          const p1 = parse(symbols[i]);
+          if (!p1) continue;
+          for (let j = i + 1; j < symbols.length; j++) {
+            const p2 = parse(symbols[j]);
+            if (!p2 || p1.root !== p2.root) continue;
+            let later = p1, earlier = p2;
+            if (p2.order > p1.order) { later = p2; earlier = p1; }
+            if (parseFloat(later.row.askprice) > parseFloat(earlier.row.askprice)) {
+              return { later, earlier };
+            }
+          }
+        }
+        return null;
+      }
       const diffChartCtx = document.getElementById('diffChart').getContext('2d');
       const diffChart = new Chart(diffChartCtx, {
         type: 'line',
@@ -43,20 +69,24 @@
             tbody.innerHTML = '';
             const rowMap = {};
             rows.forEach(r => rowMap[r.local_symbol] = r);
-            const gcZ5 = rowMap['GCZ5'];
-            const gcV5 = rowMap['GCV5'];
-            if (gcZ5 && gcV5) {
-              const diffBid = parseFloat(gcZ5.bidprice) - parseFloat(gcV5.askprice);
-              const diffAsk = parseFloat(gcZ5.askprice) - parseFloat(gcV5.bidprice);
-              const time = gcZ5.time || gcV5.time;
+            const pair = selectSymbolPair(rowMap);
+            if (pair) {
+              const later = pair.later.row;
+              const earlier = pair.earlier.row;
+              const diffBid = parseFloat(later.bidprice) - parseFloat(earlier.askprice);
+              const diffAsk = parseFloat(later.askprice) - parseFloat(earlier.bidprice);
+              const time = later.time || earlier.time;
+              const symbolLabel = `DIFF-${pair.later.suffix}-${pair.earlier.suffix}`;
               const diffRow = {
-                local_symbol: 'DIFF-Z5-V5',
+                local_symbol: symbolLabel,
                 bidprice: diffBid.toFixed(2),
                 askprice: diffAsk.toFixed(2),
                 time: time
               };
               rows.push(diffRow);
               diffData.labels.push(time);
+              diffData.datasets[0].label = `Bid ${symbolLabel}`;
+              diffData.datasets[1].label = `Ask ${symbolLabel}`;
               diffData.datasets[0].data.push(diffBid);
               diffData.datasets[1].data.push(diffAsk);
               if (diffData.labels.length > 100) {
