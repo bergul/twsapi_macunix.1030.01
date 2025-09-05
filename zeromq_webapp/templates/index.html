@@ -29,15 +29,20 @@
         ]
       };
       const monthOrder = { F:1, G:2, H:3, J:4, K:5, M:6, N:7, Q:8, U:9, V:10, X:11, Z:12 };
+      const selectedSymbols = new Set();
+      let lastDiffLabel = '';
 
       function selectSymbolPair(rowMap) {
-        const symbols = Object.keys(rowMap);
+        const symbols = Array.from(selectedSymbols);
+        if (symbols.length < 2) return null;
         function parse(sym) {
+          const row = rowMap[sym];
+          if (!row) return null;
           const m = sym.match(/^([A-Z]+)([FGHJKMNQUVXZ])(\d+)/);
           if (!m) return null;
           const [, root, month, year] = m;
           const order = parseInt(year, 10) * 12 + monthOrder[month];
-          return { root, suffix: month + year, order, row: rowMap[sym] };
+          return { root, suffix: month + year, order, row };
         }
         for (let i = 0; i < symbols.length; i++) {
           const p1 = parse(symbols[i]);
@@ -69,6 +74,9 @@
             tbody.innerHTML = '';
             const rowMap = {};
             rows.forEach(r => rowMap[r.local_symbol] = r);
+            for (const sym of Array.from(selectedSymbols)) {
+              if (!rowMap[sym]) selectedSymbols.delete(sym);
+            }
             const pair = selectSymbolPair(rowMap);
             if (pair) {
               const later = pair.later.row;
@@ -81,9 +89,16 @@
                 local_symbol: symbolLabel,
                 bidprice: diffBid.toFixed(2),
                 askprice: diffAsk.toFixed(2),
-                time: time
+                time: time,
+                synthetic: true
               };
               rows.push(diffRow);
+              if (symbolLabel !== lastDiffLabel) {
+                lastDiffLabel = symbolLabel;
+                diffData.labels = [];
+                diffData.datasets[0].data = [];
+                diffData.datasets[1].data = [];
+              }
               diffData.labels.push(time);
               diffData.datasets[0].label = `Bid ${symbolLabel}`;
               diffData.datasets[1].label = `Ask ${symbolLabel}`;
@@ -101,9 +116,21 @@
               const tr = document.createElement('tr');
               ['local_symbol','bidprice','askprice','spread','time'].forEach(col => {
                 const td = document.createElement('td');
-                td.textContent = row[col];
-                if (col === 'bidprice' || col === 'askprice' || col === 'spread') {
-                  td.className = parseFloat(row[col]) >= 0 ? 'green' : 'red';
+                if (col === 'local_symbol' && !row.synthetic) {
+                  const checkbox = document.createElement('input');
+                  checkbox.type = 'checkbox';
+                  checkbox.checked = selectedSymbols.has(row[col]);
+                  checkbox.addEventListener('change', e => {
+                    if (e.target.checked) selectedSymbols.add(row[col]);
+                    else selectedSymbols.delete(row[col]);
+                  });
+                  td.appendChild(checkbox);
+                  td.appendChild(document.createTextNode(' ' + row[col]));
+                } else {
+                  td.textContent = row[col];
+                  if (col === 'bidprice' || col === 'askprice' || col === 'spread') {
+                    td.className = parseFloat(row[col]) >= 0 ? 'green' : 'red';
+                  }
                 }
                 tr.appendChild(td);
               });
