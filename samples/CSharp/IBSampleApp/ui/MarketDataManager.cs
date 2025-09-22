@@ -44,6 +44,8 @@ namespace IBSampleApp.ui
         private bool active;
 
         private List<Contract> activeRequests = new List<Contract>();
+        // Keep the generic tick list associated with each active request (same index as activeRequests)
+        private List<string> activeGenericTickLists = new List<string>();
         private readonly Dictionary<int, double> bidPrices = new Dictionary<int, double>();
         private readonly Dictionary<int, double> askPrices = new Dictionary<int, double>();
 
@@ -59,12 +61,36 @@ namespace IBSampleApp.ui
         public void AddRequest(Contract contract, string genericTickList)
         {
             activeRequests.Add(contract);
+            activeGenericTickLists.Add(genericTickList ?? string.Empty);
             int nextReqId = TICK_ID_BASE + (currentTicker++);
             checkToAddRow(nextReqId);
             ibClient.ClientSocket.reqMktData(nextReqId, contract, genericTickList, false, false, new List<TagValue>());
 
             if (!uiControl.Visible)
                 uiControl.Visible = true;
+        }
+
+        // Re-issue all active market data requests after reconnect preserving the original request ids
+        public void ResubscribeAll()
+        {
+            // Requests are indexed from 0..currentTicker-2 in activeRequests.
+            // Request ids are TICK_ID_BASE + (index + 1)
+            int count = Math.Min(activeRequests.Count, currentTicker - 1);
+            for (int index = 0; index < count; index++)
+            {
+                int reqId = TICK_ID_BASE + (index + 1);
+                var contract = activeRequests[index];
+                var gt = index < activeGenericTickLists.Count ? activeGenericTickLists[index] : string.Empty;
+                try
+                {
+                    checkToAddRow(reqId);
+                    ibClient.ClientSocket.reqMktData(reqId, contract, gt, false, false, new List<TagValue>());
+                }
+                catch (Exception)
+                {
+                    // swallow and continue; will try again on next reconnect
+                }
+            }
         }
 
         public void RequestMarketDataType(int marketDataType)
@@ -82,6 +108,7 @@ namespace IBSampleApp.ui
         {
             ((DataGridView)uiControl).Rows.Clear();
             activeRequests.Clear();
+            activeGenericTickLists.Clear();
             uiControl.Visible = false;
             currentTicker = 1;
         }

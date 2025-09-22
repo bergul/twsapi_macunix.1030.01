@@ -4,8 +4,9 @@ import threading
 import time
 from datetime import datetime
 from typing import Any, Dict
+from queue import Queue
 
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, Response
 import zmq
 
 app = Flask(__name__)
@@ -13,6 +14,25 @@ app = Flask(__name__)
 # In-memory storage for quotes received from ZeroMQ and plain TCP.
 quotes: Dict[str, Dict[str, str]] = {}
 quotes_lock = threading.Lock()
+
+# SSE subscribers (each subscriber gets a Queue of updates)
+subscribers: list[Queue] = []
+subscribers_lock = threading.Lock()
+
+
+def add_subscriber() -> Queue:
+    q = Queue(maxsize=1000)
+    with subscribers_lock:
+        subscribers.append(q)
+    return q
+
+
+def remove_subscriber(q: Queue) -> None:
+    with subscribers_lock:
+        try:
+            subscribers.remove(q)
+        except ValueError:
+            pass
 
 
 def store_quote(message: Dict[str, Any]) -> None:
@@ -37,6 +57,22 @@ def store_quote(message: Dict[str, Any]) -> None:
             "askprice": str(ask),
             "time": msg_time,
         }
+
+    # Publish to SSE subscribers for real-time UI updates
+    event_data = {
+        "local_symbol": symbol,
+        "bidprice": str(bid),
+        "askprice": str(ask),
+        "time": msg_time,
+    }
+    with subscribers_lock:
+        subs_snapshot = list(subscribers)
+    for q in subs_snapshot:
+        try:
+            q.put_nowait(event_data)
+        except Exception:
+            # Drop if subscriber queue is full or any error occurs
+            pass
 
 
 def consume_from_zeromq() -> None:
@@ -103,6 +139,30 @@ def data_endpoint():
     """Provide the latest quotes as JSON for the frontend."""
     with quotes_lock:
         return jsonify(list(quotes.values()))
+
+@app.route("/stream")
+def stream():
+    """SSE endpoint streaming quote updates in real-time."""
+    def event_stream():
+        q = add_subscriber()
+        try:
+            # Optionally send a hello to establish stream
+            # yield "event: ping\ndata: {}\n\n"
+            while True:
+                data = q.get()  # block until an update arrives
+                yield f"data: {json.dumps(data)}\n\n"
+        except GeneratorExit:
+            # Client disconnected
+            pass
+        finally:
+            remove_subscriber(q)
+
+    headers = {
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive",
+    }
+    return Response(event_stream(), headers=headers, mimetype="text/event-stream")
+
 
 
 if __name__ == "__main__":

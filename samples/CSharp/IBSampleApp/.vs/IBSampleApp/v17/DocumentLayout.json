@@ -7,12 +7,44 @@
       "RelativeMoniker": "D:0:0:{CB7BDB4D-923F-4C4E-BB20-68DBDC33C10A}|IBSampleApp.csproj|solutionrelative:ui\\ibsampleapp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CB7BDB4D-923F-4C4E-BB20-68DBDC33C10A}|IBSampleApp.csproj|c:\\users\\bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\csharp\\ibsampleapp\\ui\\marketdatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CB7BDB4D-923F-4C4E-BB20-68DBDC33C10A}|IBSampleApp.csproj|solutionrelative:ui\\marketdatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{CB7BDB4D-923F-4C4E-BB20-68DBDC33C10A}|IBSampleApp.csproj|c:\\users\\bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\csharp\\ibsampleapp\\ui\\ibsampleapp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{CB7BDB4D-923F-4C4E-BB20-68DBDC33C10A}|IBSampleApp.csproj|solutionrelative:ui\\ibsampleapp.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CB7BDB4D-923F-4C4E-BB20-68DBDC33C10A}|IBSampleApp.csproj|c:\\users\\bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\csharp\\ibsampleapp\\util\\zmqpublisher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CB7BDB4D-923F-4C4E-BB20-68DBDC33C10A}|IBSampleApp.csproj|solutionrelative:util\\zmqpublisher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\services\\ArbitrageDetector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:services\\ArbitrageDetector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CB7BDB4D-923F-4C4E-BB20-68DBDC33C10A}|IBSampleApp.csproj|C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CB7BDB4D-923F-4C4E-BB20-68DBDC33C10A}|IBSampleApp.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\infrastructure\\ChannelsPolyfill.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:infrastructure\\ChannelsPolyfill.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\services\\OrderExecutor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:services\\OrderExecutor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\services\\DecisionEngine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:services\\DecisionEngine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\infrastructure\\InMemory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:infrastructure\\InMemory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\core\\Contracts.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:core\\Contracts.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\services\\PositionManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:services\\PositionManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CB7BDB4D-923F-4C4E-BB20-68DBDC33C10A}|IBSampleApp.csproj|c:\\users\\bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\csharp\\ibsampleapp\\ui\\marketdatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CB7BDB4D-923F-4C4E-BB20-68DBDC33C10A}|IBSampleApp.csproj|solutionrelative:ui\\marketdatamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -25,8 +57,17 @@
           "SelectedChildIndex": 1,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "MarketDataManager.cs",
+              "DocumentMoniker": "C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\ui\\MarketDataManager.cs",
+              "RelativeDocumentMoniker": "ui\\MarketDataManager.cs",
+              "ToolTip": "C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\ui\\MarketDataManager.cs",
+              "RelativeToolTip": "ui\\MarketDataManager.cs",
+              "ViewState": "AgIAAHABAAAAAAAAAEBVwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-18T19:07:54.115Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -36,36 +77,123 @@
               "RelativeDocumentMoniker": "ui\\IBSampleApp.cs",
               "ToolTip": "C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\ui\\IBSampleApp.cs",
               "RelativeToolTip": "ui\\IBSampleApp.cs",
-              "ViewState": "AgIAACwFAAAAAAAAAAAqwD4AAAAVAAAAAAAAAA==",
+              "ViewState": "AgIAAB0AAAAAAAAAAAAIwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-03T07:25:56.52Z",
+              "WhenOpened": "2025-09-18T19:05:12.768Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "MarketDataManager.cs",
-              "DocumentMoniker": "C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\ui\\MarketDataManager.cs",
-              "RelativeDocumentMoniker": "ui\\MarketDataManager.cs",
-              "ToolTip": "C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\ui\\MarketDataManager.cs",
-              "RelativeToolTip": "ui\\MarketDataManager.cs",
-              "ViewState": "AgIAADIBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Title": "IBSampleApp.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\ui\\IBSampleApp.cs",
+              "RelativeDocumentMoniker": "ui\\IBSampleApp.cs",
+              "ToolTip": "C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\ui\\IBSampleApp.cs [Design]",
+              "RelativeToolTip": "ui\\IBSampleApp.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-03T07:25:29.671Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-18T19:05:09.155Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "ZmqPublisher.cs",
-              "DocumentMoniker": "C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\util\\ZmqPublisher.cs",
-              "RelativeDocumentMoniker": "util\\ZmqPublisher.cs",
-              "ToolTip": "C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\util\\ZmqPublisher.cs",
-              "RelativeToolTip": "util\\ZmqPublisher.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAACQAAAAAAAAAAAAAAA==",
+              "Title": "ArbitrageDetector.cs",
+              "DocumentMoniker": "C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\services\\ArbitrageDetector.cs",
+              "RelativeDocumentMoniker": "services\\ArbitrageDetector.cs",
+              "ToolTip": "C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\services\\ArbitrageDetector.cs",
+              "RelativeToolTip": "services\\ArbitrageDetector.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAAADAAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-03T07:18:21.454Z",
+              "WhenOpened": "2025-09-06T16:28:15.16Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ChannelsPolyfill.cs",
+              "DocumentMoniker": "C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\infrastructure\\ChannelsPolyfill.cs",
+              "RelativeDocumentMoniker": "infrastructure\\ChannelsPolyfill.cs",
+              "ToolTip": "C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\infrastructure\\ChannelsPolyfill.cs",
+              "RelativeToolTip": "infrastructure\\ChannelsPolyfill.cs",
+              "ViewState": "AgIAADwAAAAAAAAAAAAiwB8AAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-06T16:38:35.701Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "OrderExecutor.cs",
+              "DocumentMoniker": "C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\services\\OrderExecutor.cs",
+              "RelativeDocumentMoniker": "services\\OrderExecutor.cs",
+              "ToolTip": "C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\services\\OrderExecutor.cs",
+              "RelativeToolTip": "services\\OrderExecutor.cs",
+              "ViewState": "AgIAAEUAAAAAAAAAAABRwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-06T16:36:47.959Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "DecisionEngine.cs",
+              "DocumentMoniker": "C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\services\\DecisionEngine.cs",
+              "RelativeDocumentMoniker": "services\\DecisionEngine.cs",
+              "ToolTip": "C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\services\\DecisionEngine.cs",
+              "RelativeToolTip": "services\\DecisionEngine.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-06T16:36:30.696Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "InMemory.cs",
+              "DocumentMoniker": "C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\infrastructure\\InMemory.cs",
+              "RelativeDocumentMoniker": "infrastructure\\InMemory.cs",
+              "ToolTip": "C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\infrastructure\\InMemory.cs",
+              "RelativeToolTip": "infrastructure\\InMemory.cs",
+              "ViewState": "AgIAAEkAAAAAAAAAAAAewF0AAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-06T16:29:23.843Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Contracts.cs",
+              "DocumentMoniker": "C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\core\\Contracts.cs",
+              "RelativeDocumentMoniker": "core\\Contracts.cs",
+              "ToolTip": "C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\core\\Contracts.cs",
+              "RelativeToolTip": "core\\Contracts.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAAwBAAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-06T16:29:00.817Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "PositionManager.cs",
+              "DocumentMoniker": "C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\services\\PositionManager.cs",
+              "RelativeDocumentMoniker": "services\\PositionManager.cs",
+              "ToolTip": "C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\services\\PositionManager.cs",
+              "RelativeToolTip": "services\\PositionManager.cs",
+              "ViewState": "AgIAAEgAAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-06T16:35:06.112Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\Bora\\source\\repos\\bergul\\twsapi_macunix.1030.01\\samples\\CSharp\\IBSampleApp\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-06T16:26:27.825Z"
             }
           ]
         }

@@ -57,6 +57,12 @@ namespace IBSampleApp
             wshMetaDataTable = new DataTable(),
             wshEventDataTable = new DataTable();
 
+        // Reconnect management fields
+        private volatile bool _reconnectLoopActive;
+        private Thread _reconnectThread;
+        private string _lastHost = "127.0.0.1";
+        private int _lastPort = 7497; // TWS default
+        private string _lastConnectOptions = string.Empty;
 
         public IBSampleAppDialog()
         {
@@ -153,6 +159,12 @@ namespace IBSampleApp
             ibClient.TickEFP += (tickerId, tickType, basisPoints, formattedBasisPoints, impliedFuture, holdDays, futureLastTradeDate, dividendImpact, dividendsToLastTradeDate) => addTextToBox("TickEFP. " + tickerId + ", Type: " + tickType + ", BasisPoints: " + Util.DoubleMaxString(basisPoints) + ", FormattedBasisPoints: " + formattedBasisPoints + ", ImpliedFuture: " + Util.DoubleMaxString(impliedFuture) + ", HoldDays: " + Util.IntMaxString(holdDays) + ", FutureLastTradeDate: " + futureLastTradeDate + ", DividendImpact: " + Util.DoubleMaxString(dividendImpact) + ", DividendsToLastTradeDate: " + Util.DoubleMaxString(dividendsToLastTradeDate) + Environment.NewLine);
             ibClient.TickSnapshotEnd += tickerId => addTextToBox("TickSnapshotEnd: " + tickerId + Environment.NewLine);
             ibClient.NextValidId += UpdateUI;
+            // On successful reconnect (NextValidId), resubscribe market data
+            ibClient.NextValidId += _ =>
+            {
+                try { marketDataManager.ResubscribeAll(); }
+                catch { }
+            };
             ibClient.DeltaNeutralValidation += (reqId, deltaNeutralContract) =>
                 addTextToBox("DeltaNeutralValidation. " + reqId + ", ConId: " + deltaNeutralContract.ConId + ", Delta: " + Util.DoubleMaxString(deltaNeutralContract.Delta) + ", Price: " + Util.DoubleMaxString(deltaNeutralContract.Price) + Environment.NewLine);
 
@@ -242,6 +254,43 @@ namespace IBSampleApp
             ibClient.HistoricalSchedule += UpdateUI;
             //ibClient.CompletedOrderEnd += (do nothing)
             ibClient.UserInfo += whiteBrandingId => ShowMessageOnPanel("User Info. White Branding Id: " + whiteBrandingId);
+        }
+
+        private void StartReconnectLoop()
+        {
+            if (_reconnectLoopActive)
+                return;
+            _reconnectLoopActive = true;
+            _reconnectThread = new Thread(() =>
+            {
+                while (_reconnectLoopActive && !IsConnected)
+                {
+                    try
+                    {
+                        ibClient.ClientId = int.Parse(clientid_CT.Text);
+                        ibClient.ClientSocket.SetConnectOptions(_lastConnectOptions);
+                        ibClient.ClientSocket.eConnect(_lastHost, _lastPort, ibClient.ClientId);
+
+                        var reader = new EReader(ibClient.ClientSocket, signal);
+                        reader.Start();
+                        new Thread(() => { while (ibClient.ClientSocket.IsConnected()) { signal.waitForSignal(); reader.processMsgs(); } }) { IsBackground = true }.Start();
+                    }
+                    catch { }
+
+                    for (int i = 0; i < 10 && _reconnectLoopActive && !IsConnected; i++)
+                        Thread.Sleep(500); // wait up to 5s for connection
+
+                    if (!IsConnected)
+                        Thread.Sleep(5000); // retry every 5s
+                }
+            }) { IsBackground = true };
+            _reconnectThread.Start();
+        }
+
+        private void StopReconnectLoop()
+        {
+            _reconnectLoopActive = false;
+            try { _reconnectThread?.Join(0); } catch { }
         }
 
         private void UpdateUi(string xml)
@@ -356,6 +405,8 @@ namespace IBSampleApp
         {
             IsConnected = false;
             UpdateUI(new ConnectionStatusMessage(false));
+            // start reconnect attempts
+            StartReconnectLoop();
         }
 
         void ibClient_Error(int id, int errorCode, string str, string advancedOrderRejectjson, Exception ex)
@@ -396,6 +447,8 @@ namespace IBSampleApp
             {
                 status_CT.Text = "Connected! Your client Id: " + ibClient.ClientId;
                 connectButton.Text = "Disconnect";
+                // Stop reconnect loop once connected
+                StopReconnectLoop();
             }
             else
             {
@@ -552,6 +605,11 @@ namespace IBSampleApp
                     ibClient.ClientSocket.SetConnectOptions(connectOptions);
                     ibClient.ClientSocket.eConnect(host, port, ibClient.ClientId);
 
+                    // remember these for reconnect
+                    _lastHost = host;
+                    _lastPort = port;
+                    _lastConnectOptions = connectOptions;
+
                     var reader = new EReader(ibClient.ClientSocket, signal);
 
                     reader.Start();
@@ -561,11 +619,17 @@ namespace IBSampleApp
                 catch (Exception)
                 {
                     HandleErrorMessage(new ErrorMessage(-1, -1, "Please check your connection attributes.", ""));
+                    // Start reconnect attempts using last-entered values
+                    _lastHost = string.IsNullOrEmpty(host) ? _lastHost : host;
+                    int.TryParse(port_CT.Text, out _lastPort);
+                    _lastConnectOptions = connectOptions;
+                    StartReconnectLoop();
                 }
             }
             else
             {
                 IsConnected = false;
+                StopReconnectLoop();
                 ibClient.ClientSocket.eDisconnect();
             }
         }
